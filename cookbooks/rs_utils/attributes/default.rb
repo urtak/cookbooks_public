@@ -29,9 +29,8 @@
 #
 # Optional attributes
 #
-set_unless[:rs_utils][:timezone] = "UTC"    
-set_unless[:rs_utils][:process_list] = ""   
-set_unless[:rs_utils][:hostname] = ""
+set_unless[:rs_utils][:timezone] = "UTC"
+set_unless[:rs_utils][:process_list] = ""
 set_unless[:rs_utils][:private_ssh_key] = ""
 
 set_unless[:rs_utils][:mysql_binary_backup_file] = "/var/run/mysql-binary-backup"
@@ -53,6 +52,6 @@ end
 case kernel[:machine]
 when "i686"
   rs_utils[:collectd_lib] = "/usr/lib/collectd"
-else 
+else
   rs_utils[:collectd_lib] = "/usr/lib64/collectd"
 end

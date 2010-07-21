@@ -69,7 +69,6 @@
         "choice": [
 
         ],
-        "default": "",
         "type": "string",
         "recipes": [
           "rs_utils::setup_hostname",
