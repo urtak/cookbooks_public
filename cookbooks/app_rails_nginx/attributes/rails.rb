@@ -32,7 +32,7 @@ else
 end
 
 # TODO what's going on here?
-# include_attribute "nginx::default"
+include_attribute "nginx::default"
 # set[:nginx][:configure_flags] = [
 #   "--prefix=#{nginx[:install_path]}",
 #   "--conf-path=#{nginx[:dir]}/nginx.conf",
