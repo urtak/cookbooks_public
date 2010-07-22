@@ -1,0 +1,18 @@
+server {
+  listen                  <%= @node[:rails][:application_port] %>;
+  root                    <%= @node[:rails][:code][:destination] %>/public;
+  rails_env               <%= @node[:rails][:environment] %>;
+  rails_spawn_method      <%= @node[:rails][:spawn_method] %>;
+  passenger_max_pool_size <%= @node[:rails][:max_pool_size] %>;
+  passenger_enabled       on;
+  charset                 utf-8;
+
+  <%- @node[:rails][:proxy_pass_headers_array].each do |header| -%>
+  proxy_pass_header       <%= header %>;
+  <%- end -%>
+
+  location <%= @node[:lb_haproxy][:health_check_uri] %> {
+    stub_status           on;
+    access_log            off;
+  }
+}

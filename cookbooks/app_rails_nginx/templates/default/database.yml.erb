@@ -1,0 +1,6 @@
+<%= @node[:rails][:environment] %>:
+ adapter: <%= @node[:rails][:db_adapter] %>
+ host:  <%= @node[:rails][:db_dns_name] %>
+ username: <%= @node[:rails][:db_app_user] %>
+ password:  <%= @node[:rails][:db_app_passwd] %>
+ database:  <%= @node[:rails][:db_schema_name] %>
