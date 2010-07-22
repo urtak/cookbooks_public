@@ -1,6 +1,11 @@
 # Add stub_status to nginx.
-# TODO this is nil...
-node[:nginx][:configure_flags] << "--with-http_stub_status_module"
+node.set[:nginx][:configure_flags] = [
+  "--prefix=#{nginx[:install_path]}",
+  "--conf-path=#{nginx[:dir]}/nginx.conf",
+  "--with-http_ssl_module",
+  "--with-http_gzip_static_module",
+  "--with-http_stub_status_module"
+]
 
 # Install passenger/nginx.
 include_recipe "passenger_enterprise"
