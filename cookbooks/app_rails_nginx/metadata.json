@@ -218,9 +218,6 @@
       "mysql::client": [
 
       ],
-      "nginx": [
-
-      ],
       "passenger_enterprise": [
 
       ],

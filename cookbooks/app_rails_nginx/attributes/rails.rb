@@ -30,14 +30,3 @@ when "debian","ubuntu"
 else
   set_unless[:rails][:app_user] = "www-data"
 end
-
-# TODO what's going on here?
-# include_attribute "nginx::default"
-# set[:nginx][:configure_flags] = [
-#   "--prefix=#{nginx[:install_path]}",
-#   "--conf-path=#{nginx[:dir]}/nginx.conf",
-#   "--with-http_ssl_module",
-#   "--with-http_gzip_static_module",
-#   "--with-http_stub_status_module"
-# ]
-# set_unless[:nginx] = {}

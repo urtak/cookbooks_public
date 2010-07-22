@@ -5,9 +5,6 @@ description      "Installs the rails application server with nginx+passenger"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.markdown'))
 version          "0.0.1"
 
-
-depends "nginx"
-# depends "ruby_enterprise" TODO necessary?
 depends "passenger_enterprise"
 depends "mysql::client"
 depends "repo_git"
