@@ -2,7 +2,7 @@
 raise "missing rails/code/url" if "#{node[:rails][:code][:url]}".empty?
 
 # include the public recipe to install git
-include_recipe "git::default"
+include_recipe "repo_git::default"
 
 repo "default" do
   destination @node[:rails][:code][:destination]
