@@ -26,8 +26,8 @@
 require 'uri'
 
 define :repo_git_pull, :url => "", :branch => "master", :dest => "", :cred => "" do
-  
-   
+
+
   # add repository credentials
   keyfile = nil
   if "#{params[:cred]}" != ""
@@ -35,12 +35,12 @@ define :repo_git_pull, :url => "", :branch => "master", :dest => "", :cred => ""
     bash 'create_temp_git_ssh_key' do
       code <<-EOH
         echo -n '#{params[:cred]}' > #{keyfile}
-	      chmod 700 #{keyfile}
+        chmod 700 #{keyfile}
         echo 'exec ssh -oStrictHostKeyChecking=no -i #{keyfile} "$@"' > #{keyfile}.sh
-	      chmod +x #{keyfile}.sh
+        chmod +x #{keyfile}.sh
       EOH
     end
-  end 
+  end
 
   # pull repo (if exist)
   ruby "pull-exsiting-local-repo" do
@@ -49,10 +49,10 @@ define :repo_git_pull, :url => "", :branch => "master", :dest => "", :cred => ""
     code <<-EOH
       puts "Updateing existing repo at #{params[:dest]}"
       ENV["GIT_SSH"] = "#{keyfile}.sh" unless ("#{keyfile}" == "")
-      puts `git pull` 
+      puts `git pull`
     EOH
   end
-  
+
   # clone repo (if not exist)
   ruby "create-new-local-repo" do
     not_if do File.directory?(params[:dest]) end
@@ -61,9 +61,9 @@ define :repo_git_pull, :url => "", :branch => "master", :dest => "", :cred => ""
       ENV["GIT_SSH"] = "#{keyfile}.sh" unless ("#{keyfile}" == "")
       puts `git clone #{params[:url]} -- #{params[:dest]}`
 
-      if "#{params[:branch]}" != "master" 
-	      dir = "#{params[:dest]}"
-        Dir.chdir(dir) 
+      if "#{params[:branch]}" != "master"
+        dir = "#{params[:dest]}"
+        Dir.chdir(dir)
         puts `git checkout --track -b #{params[:branch]} origin/#{params[:branch]}`
       end
     EOH

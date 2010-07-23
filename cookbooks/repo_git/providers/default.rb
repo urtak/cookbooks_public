@@ -26,9 +26,9 @@
 require 'uri'
 
 action :pull do
-  my_resource = new_resource # limitation of current LWRP implementation 
-  
-   
+  my_resource = new_resource # limitation of current LWRP implementation
+
+
   # add repository credentials
   keyfile = nil
   if "#{my_resource.cred}" != ""
@@ -36,12 +36,12 @@ action :pull do
     bash 'create_temp_git_ssh_key' do
       code <<-EOH
         echo -n '#{my_resource.cred}' > #{keyfile}
-	      chmod 700 #{keyfile}
+        chmod 700 #{keyfile}
         echo 'exec ssh -oStrictHostKeyChecking=no -i #{keyfile} "$@"' > #{keyfile}.sh
-	      chmod +x #{keyfile}.sh
+        chmod +x #{keyfile}.sh
       EOH
     end
-  end 
+  end
 
   # pull repo (if exist)
   ruby "pull-exsiting-local-repo" do
@@ -50,10 +50,10 @@ action :pull do
     code <<-EOH
       puts "Updateing existing repo at #{my_resource.dest}"
       ENV["GIT_SSH"] = "#{keyfile}.sh" unless ("#{keyfile}" == "")
-      puts `git pull` 
+      puts `git pull`
     EOH
   end
-  
+
   # clone repo (if not exist)
   ruby "create-new-local-repo" do
     not_if do File.directory?(my_resource.dest) end
@@ -62,9 +62,9 @@ action :pull do
       ENV["GIT_SSH"] = "#{keyfile}.sh" unless ("#{keyfile}" == "")
       puts `git clone #{my_resource.url} -- #{my_resource.dest}`
 
-      if "#{my_resource.branch}" != "master" 
-	      dir = "#{my_resource.dest}"
-        Dir.chdir(dir) 
+      if "#{my_resource.branch}" != "master"
+        dir = "#{my_resource.dest}"
+        Dir.chdir(dir)
         puts `git checkout --track -b #{my_resource.branch} origin/#{my_resource.branch}`
       end
     EOH
