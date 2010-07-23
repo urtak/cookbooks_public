@@ -14,5 +14,8 @@ server {
   location <%= @node[:lb_haproxy][:health_check_uri] %> {
     stub_status           on;
     access_log            off;
+    # TODO restrict access?
+    # allow                 10.0.0.0/8;
+    # deny                  all;
   }
 }
