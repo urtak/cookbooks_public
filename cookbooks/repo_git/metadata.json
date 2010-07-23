@@ -1,25 +1,124 @@
 {
     "maintainer_email": "support@rightscale.com",
     "recipes": {
+      "repo_git::default": "Default pattern of loading packages and resources provided"
     },
     "conflicting": {
     },
-    "description": "Installs the git fast version control system",
+    "description": "Manages the Git fast version control system",
     "providing": {
-      "repo_git_pull(url, branch, dest, cred)": [
+      "provider:repo": [
 
       ]
     },
     "attributes": {
+      "repo/default/repository": {
+        "required": "required",
+        "calculated": false,
+        "choice": [
+
+        ],
+        "type": "string",
+        "recipes": [
+
+        ],
+        "display_name": "Repository Url",
+        "description": ""
+      },
+      "repo/default/branch": {
+        "required": "optional",
+        "calculated": false,
+        "choice": [
+
+        ],
+        "type": "string",
+        "recipes": [
+
+        ],
+        "display_name": "Branch/Tag",
+        "description": ""
+      },
+      "repo/default/enable_submodules": {
+        "required": "optional",
+        "calculated": false,
+        "choice": [
+
+        ],
+        "default": "false",
+        "type": "string",
+        "recipes": [
+
+        ],
+        "display_name": "Enable Submodules",
+        "description": ""
+      },
+      "repo/default/depth": {
+        "required": "optional",
+        "calculated": false,
+        "choice": [
+
+        ],
+        "default": null,
+        "type": "string",
+        "recipes": [
+
+        ],
+        "display_name": "Depth",
+        "description": ""
+      },
+      "repo/default/ssh_key": {
+        "required": "optional",
+        "calculated": false,
+        "choice": [
+
+        ],
+        "default": null,
+        "type": "string",
+        "recipes": [
+
+        ],
+        "display_name": "SSH Key",
+        "description": ""
+      },
+      "repo/default/remote": {
+        "required": "optional",
+        "calculated": false,
+        "choice": [
+
+        ],
+        "default": "origin",
+        "type": "string",
+        "recipes": [
+
+        ],
+        "display_name": "Remote",
+        "description": ""
+      },
+      "repo/default/provider": {
+        "required": "optional",
+        "calculated": false,
+        "choice": [
+
+        ],
+        "default": "repo_git",
+        "type": "string",
+        "recipes": [
+
+        ],
+        "display_name": "Repository Provider Type",
+        "description": ""
+      }
     },
     "replacing": {
     },
     "dependencies": {
-      "git": [
-
-      ]
     },
     "groupings": {
+      "repo/default": {
+        "display_name": "Git Client Default Settings",
+        "description": "Settings for managing a Git source repository",
+        "databag": true
+      }
     },
     "long_description": "",
     "recommendations": {

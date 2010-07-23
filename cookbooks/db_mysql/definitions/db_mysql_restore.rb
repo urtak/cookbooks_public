@@ -23,21 +23,19 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-define :db_mysql_restore,  :url => nil, :branch => 'master', :user => nil, :credentials => nil, :file_path => nil, :schema_name => nil, :tmp_dir => '/tmp' do
+define :db_mysql_restore,  :file_path => nil, :schema_name => nil, :tmp_dir => '/tmp' do
 
   repo_params = params # see http://tickets.opscode.com/browse/CHEF-422
   
   dir = "#{params[:tmp_dir]}/db_mysql_restore"
   dumpfile = "#{dir}/#{params[:file_path]}"
   schema_name = params[:schema_name]
-
-  # grab mysqldump file from remote repository
-  repo_git_pull "Get mysqldump from git repository" do
-    url repo_params[:url]
-    branch repo_params[:branch] 
-    user repo_params[:user]
-    dest dir
-    cred repo_params[:credentials]
+  
+  include_recipe "repo_git::default"  # this must run in the same converge until persistent resources are supported
+  
+  repo "default" do
+    destination dir
+    action :pull
   end
 
   bash "unpack mysqldump file: #{dumpfile}" do

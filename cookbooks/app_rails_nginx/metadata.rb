@@ -9,7 +9,8 @@ depends "passenger_enterprise"
 depends "mysql::client"
 depends "repo_git"
 depends "db_mysql"
-depends "repo_git_pull(url, branch, user, dest, cred)"
+
+depends "resource:repo['default']"
 
 recipe "app_rails_nginx::default", "Installs the rails application server essentials."
 recipe "app_rails_nginx::do_update_code", "Update application source files from the remote repository."

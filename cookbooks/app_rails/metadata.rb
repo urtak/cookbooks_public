@@ -9,10 +9,9 @@ depends "web_apache"
 depends "rails"
 depends "passenger_apache2::mod_rails"
 depends "mysql::client"
-depends "repo_git"
 depends "db_mysql"
 
-depends "repo_git_pull(url, branch, user, dest, cred)"
+depends "resource:repo['default']" # not really in metadata spec yet. Format TBD.
  
 recipe  "app_rails::default", "Runs app_rails::install_rails."
 recipe  "app_rails::do_db_restore", "Restore the application database schema from a remote location."
@@ -51,17 +50,6 @@ attribute "rails/db_schema_name",
 #  :required => true,
 #  :recipes => []
 
-attribute "rails/code",
-  :display_name => "Rails Application Code",
-  :type => "hash"
-  
-attribute "rails/code/url",
-  :display_name => "Repository URL",
-  :description => "Specify the URL location of the repository that contains the application code. Ex: git://github.com/mysite/myapp.git",
-  :required => true,
-  :recipes => ["app_rails::do_db_restore", "app_rails::do_update_code", "app_rails::install_rails", "app_rails::default", "app_rails::default" ]
-
-
 #
 # recommended attributes
 #
@@ -92,10 +80,6 @@ attribute "rails/db_mysqldump_file_path",
 #
 # optional attributes
 #
-attribute "rails/code/credentials",
-  :display_name => "Repository Credentials",
-  :description => "The private SSH key of the git repository.",
-  :recipes => ["app_rails::do_db_restore", "app_rails::do_update_code", "app_rails::install_rails", "app_rails::default", "app_rails::default" ]
   
 #attribute "rails/version",
 #  :display_name => "Rails Version",
@@ -108,12 +92,6 @@ attribute "rails/code/credentials",
 #  :description => "Specify the MaxPoolSize in the Apache vhost.  Sets the number of desired mongrel processes on the Rails server.  Specify a value between 4-8 for a small instance.",
 #  :default => "4",
 #  :recipes => ["app_rails::do_db_restore", "app_rails::do_update_code", "app_rails::install_rails" ]
-  
-attribute "rails/code/branch",
-  :display_name => "Repository Branch",
-  :description => "The name of the branch within the git repository where the application code should be pulled from.",
-  :default => "master",
-  :recipes => ["app_rails::do_db_restore", "app_rails::do_update_code", "app_rails::install_rails", "app_rails::default" ]
   
 attribute "rails/application_port",
   :display_name => "Application Port",

@@ -1,7 +1,8 @@
-# Cookbook Name:: app_php
-# Recipe:: do_db_restore
 #
-# Copyright (c) 2009 RightScale Inc
+# Cookbook Name:: repo_git
+# Recipe:: default
+#
+# Copyright (c) 2010 RightScale Inc
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -22,14 +23,39 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+PROVIDER_NAME = "repo_git"  
 
-# restore application database schema from remote location
-db_mysql_restore "do database restore" do
-  file_path @node[:php][:db_mysqldump_file_path]
+unless node[:platform] == "mac_os_x" then
+  # Install git client
+  case node[:platform]
+  when "debian", "ubuntu"
+    package "git-core"
+  else 
+    package "git"
+  end
+
+  package "gitk"
+  package "git-svn"
+  package "git-email"
 end
 
-db_mysql_set_privileges "setup user privileges" do
-  preset 'user'
-  username @node[:php][:db_app_user]
-  password @node[:php][:db_app_passwd]
+# Setup all git resources that have attributes in the node.
+node[:repo].each do |resource_name, entry| 
+  if entry[:provider] == PROVIDER_NAME then
+    
+    url = entry[:repository]
+    raise "ERROR: You did not specify a repository for repo resource named #{resource_name}." unless url
+    branch = (entry[:branch]) ? entry[:branch] : "master"
+    key = (entry[:ssh_key]) ? entry[:ssh_key] : ""
+
+    # Setup git client
+    repo resource_name do
+      provider "repo_git"
+      repository url
+      revision branch
+      ssh_key key
+            
+      # persist true      # developed by RightScale (to contribute)
+    end
+  end
 end

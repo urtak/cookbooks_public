@@ -212,7 +212,7 @@
       "db_mysql": [
 
       ],
-      "repo_git_pull(url, branch, user, dest, cred)": [
+      "resource:repo['default']": [
 
       ],
       "mysql::client": [
