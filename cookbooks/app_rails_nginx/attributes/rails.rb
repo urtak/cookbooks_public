@@ -3,14 +3,11 @@ set_unless[:rails][:db_app_user] = ""
 set_unless[:rails][:db_app_passwd] = ""
 set_unless[:rails][:db_schema_name] = ""
 set_unless[:rails][:db_dns_name] = ""
-set_unless[:rails][:code][:url] = ""
 
 # Optional attributes
 set_unless[:rails][:application_name] = "myapp"
 set_unless[:rails][:environment] = "production"
 set_unless[:rails][:bundler_version] = "1.0.0.beta.8"
-set_unless[:rails][:code][:credentials] = ""
-set_unless[:rails][:code][:branch] = "master"
 set_unless[:rails][:max_pool_size] = "16"
 set_unless[:rails][:spawn_method] = "smart-lv2"
 

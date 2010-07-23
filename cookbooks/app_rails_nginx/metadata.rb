@@ -16,14 +16,9 @@ recipe "app_rails_nginx::default", "Installs the rails application server essent
 recipe "app_rails_nginx::do_update_code", "Update application source files from the remote repository."
 recipe "app_rails_nginx::setup_db_config", "Configures the rails database.yml file."
 
-attribute "rails", {
-  :display_name => "Rails Passenger Settings",
-  :type => "hash"
-}
-
-attribute "rails/code", {
-  :display_name => "Rails Application Code",
-  :type => "hash"
+grouping "rails", {
+  :display_name => "Rails Settings",
+  :description => "Settings for the backend rails app."
 }
 
 # required attributes
@@ -55,13 +50,6 @@ attribute "rails/db_dns_name", {
   :recipes => ["app_rails_nginx::default", "app_rails_nginx::setup_db_config"]
 }
 
-attribute "rails/code/url", {
-  :display_name => "Repository URL",
-  :description => "Specify the URL location of the repository that contains the application code. E.g. `git://github.com/mysite/myapp.git`.",
-  :required => true,
-  :recipes => ["app_rails_nginx::default", "app_rails_nginx::do_update_code"]
-}
-
 # optional attributes
 attribute "rails/application_name", {
   :display_name => "Application Name",
@@ -82,19 +70,6 @@ attribute "rails/bundler_version", {
   :description => "The version of gem bundler to install. E.g. `1.0.0.beta.8`.",
   :default => "1.0.0.beta.8",
   :recipes => ["app_rails_nginx::default"]
-}
-
-attribute "rails/code/credentials", {
-  :display_name => "Repository Credentials",
-  :description => "The private SSH key of the git repository.",
-  :recipes => ["app_rails_nginx::default", "app_rails_nginx::do_update_code"]
-}
-
-attribute "rails/code/branch", {
-  :display_name => "Repository Branch",
-  :description => "The name of the branch within the git repository where the application code should be pulled from.",
-  :default => "master",
-  :recipes => ["app_rails_nginx::default", "app_rails_nginx::do_update_code"]
 }
 
 attribute "rails/max_pool_size", {

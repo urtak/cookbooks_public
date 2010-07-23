@@ -1,7 +1,3 @@
-# Raise trouble for required attributes.
-raise "missing rails/code/url" if "#{node[:rails][:code][:url]}".empty?
-
-# include the public recipe to install git
 include_recipe "repo_git::default"
 
 repo "default" do

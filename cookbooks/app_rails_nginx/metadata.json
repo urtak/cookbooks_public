@@ -25,33 +25,6 @@
         "display_name": "Spawn Method",
         "description": "Specify which Rails spawn method should be used. Ex: `conservative`, `smart`, `smart-lv2`"
       },
-      "rails": {
-        "required": "optional",
-        "calculated": false,
-        "choice": [
-
-        ],
-        "type": "hash",
-        "recipes": [
-
-        ],
-        "display_name": "Rails Passenger Settings"
-      },
-      "rails/code/branch": {
-        "required": "optional",
-        "calculated": false,
-        "choice": [
-
-        ],
-        "default": "master",
-        "type": "string",
-        "recipes": [
-          "app_rails_nginx::default",
-          "app_rails_nginx::do_update_code"
-        ],
-        "display_name": "Repository Branch",
-        "description": "The name of the branch within the git repository where the application code should be pulled from."
-      },
       "rails/db_schema_name": {
         "required": "required",
         "calculated": false,
@@ -122,20 +95,6 @@
         "display_name": "Rails Environment",
         "description": "The Rails Environment of the current workspace. E.g. `production`."
       },
-      "rails/code/url": {
-        "required": "required",
-        "calculated": false,
-        "choice": [
-
-        ],
-        "type": "string",
-        "recipes": [
-          "app_rails_nginx::default",
-          "app_rails_nginx::do_update_code"
-        ],
-        "display_name": "Repository URL",
-        "description": "Specify the URL location of the repository that contains the application code. E.g. `git://github.com/mysite/myapp.git`."
-      },
       "rails/db_dns_name": {
         "required": "required",
         "calculated": false,
@@ -149,32 +108,6 @@
         ],
         "display_name": "Database DNS Name",
         "description": "The fully qualified domain name of the database server to which the application server(s) will connect."
-      },
-      "rails/code": {
-        "required": "optional",
-        "calculated": false,
-        "choice": [
-
-        ],
-        "type": "hash",
-        "recipes": [
-
-        ],
-        "display_name": "Rails Application Code"
-      },
-      "rails/code/credentials": {
-        "required": "optional",
-        "calculated": false,
-        "choice": [
-
-        ],
-        "type": "string",
-        "recipes": [
-          "app_rails_nginx::default",
-          "app_rails_nginx::do_update_code"
-        ],
-        "display_name": "Repository Credentials",
-        "description": "The private SSH key of the git repository."
       },
       "rails/application_name": {
         "required": "optional",
@@ -226,6 +159,10 @@
       ]
     },
     "groupings": {
+      "rails": {
+        "display_name": "Rails Settings",
+        "description": "Settings for the backend rails app."
+      }
     },
     "long_description": "# Rails Backend Server with nginx+passenger\n\nUnlike the rails_app cookbook, this cookbook assumes that you have a completely separate front end instance. This cookbook *just* sets up nginx+passenger to listen on port 8000 so that you can connect it to a front end running HAProxy.\n",
     "recommendations": {
