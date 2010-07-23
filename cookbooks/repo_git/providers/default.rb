@@ -28,8 +28,6 @@ require 'uri'
 action :pull do
   my_resource = new_resource # limitation of current LWRP implementation 
   
-  # include the public recipe to install git
-  include_recipe "git"
    
   # add repository credentials
   keyfile = nil
