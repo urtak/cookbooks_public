@@ -23,14 +23,14 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-PROVIDER_NAME = "repo_git"  
+PROVIDER_NAME = "repo_git"
 
 unless node[:platform] == "mac_os_x" then
   # Install git client
   case node[:platform]
   when "debian", "ubuntu"
     package "git-core"
-  else 
+  else
     package "git"
   end
 
@@ -40,22 +40,27 @@ unless node[:platform] == "mac_os_x" then
 end
 
 # Setup all git resources that have attributes in the node.
-node[:repo].each do |resource_name, entry| 
+node[:repo].each do |resource_name, entry|
   if entry[:provider] == PROVIDER_NAME then
-    
-    url = entry[:repository]
-    raise "ERROR: You did not specify a repository for repo resource named #{resource_name}." unless url
-    branch = (entry[:branch]) ? entry[:branch] : "master"
-    key = (entry[:ssh_key]) ? entry[:ssh_key] : ""
-    submodule = (entry[:enable_submodules] == "true") ? true : false
+    repository = entry[:repository]
+    raise "ERROR: You did not specify a repository for repo resource named #{resource_name}." unless repository
+    ssh_key           = !"#{entry[:ssh_key]}".empty? ? entry[:ssh_key] : nil
+    revision          = entry[:revision] ? entry[:revision] : "master"
+    remote            = entry[:remote] ? entry[:remote] : "origin"
+    enable_submodules = entry[:enable_submodules] == "true" ? true : false
+    restart_command   = entry[:restart_command] ? entry[:restart_command] : nil
+    migration_command = entry[:migration_command] ? entry[:migration_command] : nil
+    migrate           = entry[:migrate] == "true" ? true : false
 
-    # Setup git client
     repo resource_name do
-      provider "repo_git"
-      repository url
-      revision branch
-      ssh_key key
-      enable_submodules submodule      
+      provider          "repo_git"
+      repository        repository
+      revision          revision
+      ssh_key           ssh_key
+      enable_submodules enable_submodules
+      restart_command   restart_command
+      migration_command migration_command
+      migrate           migrate
       # persist true      # developed by RightScale (to contribute)
     end
   end

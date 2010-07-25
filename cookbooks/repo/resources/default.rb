@@ -29,6 +29,10 @@ attribute :destination, :kind_of => String
 attribute :repository, :kind_of => String
 attribute :revision, :kind_of => String
 attribute :provider_type, :kind_of => String
+attribute :environment, :kind_of => Hash
+attribute :restart_command, :kind_of => String
+attribute :migration_command, :kind_of => String
+attribute :migrate, :kind_of => [ TrueClass, FalseClass ]
 
 # Subversion only
 attribute :svn_username, :kind_of => String
@@ -37,3 +41,4 @@ attribute :svn_password, :kind_of => String
 # Git only
 attribute :ssh_key, :kind_of => String
 attribute :enable_submodules, :kind_of => [ TrueClass, FalseClass ]
+attribute :remote, :kind_of => String

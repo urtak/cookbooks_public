@@ -40,30 +40,25 @@ action :pull do
     end
   end
 
-  git "sync repo" do
-    destination       new_resource.destination
+  deploy_revision "#{new_resource.destination}" do
+    # From do_update_code recipe:
+    deploy_to         new_resource.destination
+    environment       new_resource.environment
+    # From UI:
+    # user              "deploy_ninja" TODO deploy as user?
     repository        new_resource.repository
-    reference         new_resource.revision
-    ssh_wrapper       ssh_wrapper
+    revision          new_resource.revision
+    remote            new_resource.remote
     enable_submodules new_resource.enable_submodules
-    action            :sync
+    restart_command   new_resource.restart_command
+    migration_command new_resource.migration_command
+    migrate           new_resource.migrate
+    # Fixed options:
+    shallow_clone     true
+    git_ssh_wrapper   ssh_wrapper
+    scm_provider      Chef::Provider::Git
+    action            :deploy
   end
-
-  # TODO use chef-deploy?
-  # deploy "/my/deploy/dir" do
-  #   repo "git@github.com/whoami/project"
-  #   revision "abc123" # or "HEAD" or "TAG_for_1.0" or (subversion) "1234"
-  #   user "deploy_ninja"
-  #   enable_submodules true
-  #   migrate true
-  #   migration_command "rake db:migrate"
-  #   environment "RAILS_ENV" => "production", "OTHER_ENV" => "foo"
-  #   shallow_clone true
-  #   action :deploy # or :rollback
-  #   restart_command "touch tmp/restart.txt"
-  #   git_ssh_wrapper "wrap-ssh4git.sh"
-  #   scm_provider Chef::Provider::Git # is the default, for svn: Chef::Provider::Subversion
-  # end
 
   ruby_block "clean up ssh key" do
     only_if { !"#{ssh_key}".empty? }

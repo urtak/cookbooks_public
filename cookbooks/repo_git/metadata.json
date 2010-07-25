@@ -22,21 +22,22 @@
         "recipes": [
 
         ],
-        "display_name": "Repository Url",
-        "description": ""
+        "display_name": "Repository URL",
+        "description": "The git url."
       },
-      "repo/default/branch": {
+      "repo/default/migrate": {
         "required": "optional",
         "calculated": false,
         "choice": [
 
         ],
+        "default": "false",
         "type": "string",
         "recipes": [
 
         ],
-        "display_name": "Branch/Tag",
-        "description": ""
+        "display_name": "Migrate the database?",
+        "description": "Run the migration_command during deploy."
       },
       "repo/default/enable_submodules": {
         "required": "optional",
@@ -50,21 +51,21 @@
 
         ],
         "display_name": "Enable Submodules",
-        "description": ""
+        "description": "Automatically checkout the repo's submodules during deploy?"
       },
-      "repo/default/depth": {
+      "repo/default/migration_command": {
         "required": "optional",
         "calculated": false,
         "choice": [
 
         ],
-        "default": null,
+        "default": "rake db:migrate",
         "type": "string",
         "recipes": [
 
         ],
-        "display_name": "Depth",
-        "description": ""
+        "display_name": "Migrate Command",
+        "description": "The command used to migrate the database."
       },
       "repo/default/ssh_key": {
         "required": "optional",
@@ -77,8 +78,22 @@
         "recipes": [
 
         ],
-        "display_name": "SSH Key",
-        "description": ""
+        "display_name": "SSH Private Key",
+        "description": "This private ssh key will be used to access your git repository URL."
+      },
+      "repo/default/restart_command": {
+        "required": "optional",
+        "calculated": false,
+        "choice": [
+
+        ],
+        "default": "touch tmp/restart.txt",
+        "type": "string",
+        "recipes": [
+
+        ],
+        "display_name": "Restart Command",
+        "description": "The command used to restart the web app."
       },
       "repo/default/remote": {
         "required": "optional",
@@ -92,7 +107,21 @@
 
         ],
         "display_name": "Remote",
-        "description": ""
+        "description": "The remote to use for pulling."
+      },
+      "repo/default/revision": {
+        "required": "optional",
+        "calculated": false,
+        "choice": [
+
+        ],
+        "default": "master",
+        "type": "string",
+        "recipes": [
+
+        ],
+        "display_name": "Branch/Tag/Revision",
+        "description": "Which branch/tag/revision to deploy."
       },
       "repo/default/provider": {
         "required": "optional",
@@ -106,7 +135,7 @@
 
         ],
         "display_name": "Repository Provider Type",
-        "description": ""
+        "description": "Deploy with git."
       }
     },
     "replacing": {

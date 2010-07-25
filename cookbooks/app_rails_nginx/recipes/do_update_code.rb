@@ -1,8 +1,9 @@
 include_recipe "repo_git::default"
 
 repo "default" do
-  destination @node[:rails][:code][:destination]
-  action :pull
+  destination node[:rails][:code][:destination]
+  environment {"RAILS_ENV" => node[:rails][:environment]}
+  action      :pull
 end
 
 # TODO remove?
