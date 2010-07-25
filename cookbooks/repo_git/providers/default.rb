@@ -26,13 +26,12 @@
 action :pull do
 
   ssh_key = new_resource.ssh_key
-  ssh_keyfile = nil
-  ssh_wrapper = nil
+  ssh_keyfile = "/tmp/gitkey"
+  ssh_wrapper = "#{ssh_keyfile}.sh"
+
   ruby_block "add ssh key and ssh wrapper script" do
     only_if { !"#{ssh_key}".empty? }
     block do
-      ssh_keyfile = "/tmp/gitkey"
-      ssh_wrapper = "#{ssh_keyfile}.sh"
       ::File.open(ssh_keyfile, "w") { |f| f.write(ssh_key) }
       ::File.open(ssh_wrapper, "w") { |f| f.write("exec ssh -oStrictHostKeyChecking=no -i #{ssh_keyfile} \"$@\"") }
       system("chmod 600 #{ssh_keyfile}")
