@@ -24,39 +24,52 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 action :pull do
-  # add ssh key and exec script
-  keyfile = nil
-  keyname = new_resource.ssh_key
-  ssh_wrapper = keyname + ".sh"
-  if "#{keyname}" != ""
-    keyfile = "/tmp/gitkey"
-    bash 'create_temp_git_ssh_key' do
-      code <<-EOH
-        echo -n '#{keyname}' > #{keyfile}
-        chmod 700 #{keyfile}
-        echo 'exec ssh -oStrictHostKeyChecking=no -i #{keyfile} "$@"' > #{ssh_wrapper}
-        chmod +x #{keyfile}.sh
-      EOH
+
+  ssh_key = new_resource.ssh_key
+  ssh_keyfile = nil
+  ssh_wrapper = nil
+  ruby_block "add ssh key and ssh wrapper script" do
+    only_if { !"#{ssh_key}".empty? }
+    block do
+      ssh_keyfile = "/tmp/gitkey"
+      ssh_wrapper = "#{ssh_keyfile}.sh"
+      File.open(ssh_keyfile, "w") { |f| f.write(ssh_key) }
+      File.open(ssh_wrapper, "w") { |f| f.write("exec ssh -oStrictHostKeyChecking=no -i #{ssh_keyfile} \"$@\"") }
+      system("chmod 600 #{ssh_keyfile}")
+      system("chmod 700 #{ssh_wrapper}")
     end
   end
 
-  git "sync repo"  do
-    destination new_resource.destination
-    repository new_resource.repository
-    reference new_resource.revision
-    ssh_wrapper keyfile
+  git "sync repo" do
+    destination       new_resource.destination
+    repository        new_resource.repository
+    reference         new_resource.revision
+    ssh_wrapper       ssh_wrapper
     enable_submodules new_resource.enable_submodules
-    action :sync
-  end
- 
-  # delete SSH key & clear GIT_SSH
-  if keyfile != nil
-     bash 'delete_temp_git_ssh_key' do
-       code <<-EOH
-         rm -f #{keyfile}
-         rm -f #{ssh_wrapper}
-       EOH
-     end
+    action            :sync
   end
 
+  # TODO use chef-deploy?
+  # deploy "/my/deploy/dir" do
+  #   repo "git@github.com/whoami/project"
+  #   revision "abc123" # or "HEAD" or "TAG_for_1.0" or (subversion) "1234"
+  #   user "deploy_ninja"
+  #   enable_submodules true
+  #   migrate true
+  #   migration_command "rake db:migrate"
+  #   environment "RAILS_ENV" => "production", "OTHER_ENV" => "foo"
+  #   shallow_clone true
+  #   action :deploy # or :rollback
+  #   restart_command "touch tmp/restart.txt"
+  #   git_ssh_wrapper "wrap-ssh4git.sh"
+  #   scm_provider Chef::Provider::Git # is the default, for svn: Chef::Provider::Subversion
+  # end
+
+  ruby_block "clean up ssh key" do
+    only_if { !"#{ssh_key}".empty? }
+    block do
+      FileUtils.rm(ssh_keyfile, :force => true)
+      FileUtils.rm(ssh_wrapper, :force => true)
+    end
+  end
 end
