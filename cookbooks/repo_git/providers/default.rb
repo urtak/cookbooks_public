@@ -33,8 +33,8 @@ action :pull do
     block do
       ssh_keyfile = "/tmp/gitkey"
       ssh_wrapper = "#{ssh_keyfile}.sh"
-      File.open(ssh_keyfile, "w") { |f| f.write(ssh_key) }
-      File.open(ssh_wrapper, "w") { |f| f.write("exec ssh -oStrictHostKeyChecking=no -i #{ssh_keyfile} \"$@\"") }
+      ::File.open(ssh_keyfile, "w") { |f| f.write(ssh_key) }
+      ::File.open(ssh_wrapper, "w") { |f| f.write("exec ssh -oStrictHostKeyChecking=no -i #{ssh_keyfile} \"$@\"") }
       system("chmod 600 #{ssh_keyfile}")
       system("chmod 700 #{ssh_wrapper}")
     end
@@ -68,8 +68,8 @@ action :pull do
   ruby_block "clean up ssh key" do
     only_if { !"#{ssh_key}".empty? }
     block do
-      FileUtils.rm(ssh_keyfile, :force => true)
-      FileUtils.rm(ssh_wrapper, :force => true)
+      ::FileUtils.rm(ssh_keyfile, :force => true)
+      ::FileUtils.rm(ssh_wrapper, :force => true)
     end
   end
 end
